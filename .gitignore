@@ -1,0 +1,6 @@
+*.env
+.docker_build/
+*.exe
+/data
+Dockerfile
+*.yml
