@@ -92,7 +92,7 @@ func CreateUser(c *fiber.Ctx) error {
 
 	new := User{
 		Username: strings.ToLower(json.Username),
-		Discord: json.Discord,
+		Discord:  json.Discord,
 		Password: password,
 		Email:    json.Email,
 		ID:       guuid.New(),
@@ -157,6 +157,22 @@ func ChangePassword(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).SendString("Invalid Password")
 	}
 	user.Password = hashAndSalt([]byte(json.NewPassword))
+	db.Save(&user)
+	return c.SendStatus(fiber.StatusOK)
+}
+
+func ChangeDiscord(c *fiber.Ctx) error {
+	type ChangeDiscordRequest struct {
+		NewDiscord int `json:"newDiscord"`
+	}
+
+	db := database.DB
+	user := c.Locals("user").(User)
+	json := new(ChangeDiscordRequest)
+	if err := c.BodyParser(json); err != nil {
+		return c.SendStatus(fiber.StatusBadRequest)
+	}
+	user.Discord = json.NewDiscord
 	db.Save(&user)
 	return c.SendStatus(fiber.StatusOK)
 }

@@ -17,7 +17,8 @@ func Initalize(router *fiber.App) {
 
 	users := router.Group("/users")
 	users.Delete("/", middleware.Authenticated, handlers.DeleteUser)
-	users.Patch("/", middleware.Authenticated, handlers.ChangePassword)
+	users.Patch("/password", middleware.Authenticated, handlers.ChangePassword)
+	users.Patch("/link", middleware.Authenticated, handlers.ChangeDiscord)
 	users.Post("/", middleware.Authenticated, handlers.GetUserInfo)
 	users.Put("/", handlers.CreateUser)
 	users.Post("/login", handlers.Login)
@@ -35,6 +36,13 @@ func Initalize(router *fiber.App) {
 	keys.Post("/all", handlers.GetKeys)
 	keys.Delete("/", handlers.DeleteKey)
 	keys.Post("/", handlers.GetKeyById)
+
+	// files := router.Group("/files")
+	// files.Put("/", handlers.CreateFile)
+	// files.Post("/", handlers.GetFile)
+	// files.Delete("/", handlers.DeleteFile)
+	// files.Patch("/", handlers.UpdateFile)
+
 
 	router.Use(func(c *fiber.Ctx) error {
 		return c.Status(404).SendString("404 Not Found")
