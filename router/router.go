@@ -4,9 +4,22 @@ import (
 	"github.com/NikSchaefer/go-fiber/handlers"
 	"github.com/NikSchaefer/go-fiber/middleware"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/filesystem"
+	"github.com/markbates/pkger"
 )
 
 func Initalize(router *fiber.App) {
+	router.Use(filesystem.New(filesystem.Config{
+		Root:         pkger.Dir("./assets"),
+	}))
+
+
+    app.Use("/assets", filesystem.New(filesystem.Config{
+        Root: pkger.Dir("/assets"),
+    })
+
+    log.Fatal(app.Listen(":3000"))
+
 	router.Use(middleware.Security)
 
 	router.Get("/", func(c *fiber.Ctx) error {
