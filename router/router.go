@@ -1,6 +1,8 @@
 package router
 
 import (
+	"log"
+
 	"github.com/NikSchaefer/go-fiber/handlers"
 	"github.com/NikSchaefer/go-fiber/middleware"
 	"github.com/gofiber/fiber/v2"
@@ -14,11 +16,11 @@ func Initalize(router *fiber.App) {
 	}))
 
 
-    app.Use("/assets", filesystem.New(filesystem.Config{
+    router.Use("/assets", filesystem.New(filesystem.Config{
         Root: pkger.Dir("/assets"),
-    })
+    }))
 
-    log.Fatal(app.Listen(":3000"))
+    log.Fatal(router.Listen(":3000"))
 
 	router.Use(middleware.Security)
 
