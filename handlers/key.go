@@ -24,18 +24,14 @@ func CreateKey(c *fiber.Ctx) error {
 	}
 
 	db.Create(&new)
-	key := Key{ID: guuid.New(),	Expires:  SessionExpires(1)}
-	err := db.Create(&key).Error
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).SendString("Creation Error")
-	}
+	
 	c.Cookie(&fiber.Cookie{
 		Name:     "key",
 		Expires:  SessionExpires(1),
-		Value:    key.ID.String(),
+		Value:    new.ID.String(),
 		HTTPOnly: false,
 	})
-	return c.Status(fiber.StatusOK).JSON(key)
+	return c.Status(fiber.StatusOK).JSON(new)
 }
 
 func GetKeys(c *fiber.Ctx) error {
@@ -45,7 +41,10 @@ func GetKeys(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(Keys)
 }
 
+
 func GetKeyById(c *fiber.Ctx) error {
+	ip := c.IP() 
+	
 	db := database.DB
 	json := new(Key)
 
@@ -56,9 +55,17 @@ func GetKeyById(c *fiber.Ctx) error {
 	found := Key{}
 	query := Key{ID: json.ID}
 	err := db.First(&found, &query).Error
+
 	if err == gorm.ErrRecordNotFound {
-		return c.Status(fiber.StatusNotFound).SendString("Key not Found")
+		return c.Status(fiber.StatusNotFound).SendString("ID not Found")
 	}
+
+	if found.IP != "" {
+		return c.Status(fiber.StatusBadRequest).SendString("This key is already in use by another user")
+	}
+
+	found.IP = ip
+	db.Save(&found)
 
 	return c.Status(fiber.StatusOK).JSON(found)
 }
@@ -81,3 +88,5 @@ func DeleteKey(c *fiber.Ctx) error {
 	db.Delete(&found)
 	return c.SendStatus(fiber.StatusOK)
 }
+
+

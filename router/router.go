@@ -1,26 +1,19 @@
 package router
 
 import (
-	"log"
 
 	"github.com/NikSchaefer/go-fiber/handlers"
 	"github.com/NikSchaefer/go-fiber/middleware"
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/filesystem"
-	"github.com/markbates/pkger"
+	// "github.com/gofiber/fiber/v2/middleware/filesystem"
+	// "github.com/markbates/pkger"
 )
 
 func Initalize(router *fiber.App) {
-	router.Use(filesystem.New(filesystem.Config{
-		Root:         pkger.Dir("./assets"),
-	}))
 
-
-    router.Use("/assets", filesystem.New(filesystem.Config{
-        Root: pkger.Dir("/assets"),
-    }))
-
-    log.Fatal(router.Listen(":3000"))
+    // router.Use("/assets", filesystem.New(filesystem.Config{
+    //     Root: pkger.Dir("/assets"),
+    // }))
 
 	router.Use(middleware.Security)
 
@@ -47,10 +40,15 @@ func Initalize(router *fiber.App) {
 	products.Patch("/", handlers.UpdateProduct)
 
 	keys := router.Group("/keys")
-	keys.Put("/", handlers.CreateKey)
+	keys.Put("/", middleware.KeyCheck, handlers.CreateKey)
 	keys.Post("/all", handlers.GetKeys)
 	keys.Delete("/", handlers.DeleteKey)
 	keys.Post("/", handlers.GetKeyById)
+
+	hub := router.Group("/hub")
+	hub.Put("/", middleware.KeyCheck, handlers.CreateScript)
+	hub.Post("/", handlers.GetScripts)
+	hub.Delete("/", middleware.KeyCheck, handlers.DeleteScript)
 
 	// files := router.Group("/files")
 	// files.Put("/", handlers.CreateFile)

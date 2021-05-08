@@ -22,7 +22,9 @@ func getenv(key, fallback string) string {
 
 func main() {
 	godotenv.Load()
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		ProxyHeader: "",
+	})
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: "*", // comma format e.g.
 		AllowHeaders: "Origin, Content-Type, Accept",
