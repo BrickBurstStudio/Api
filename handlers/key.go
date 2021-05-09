@@ -12,19 +12,19 @@ type Key model.Key
 
 func CreateKey(c *fiber.Ctx) error {
 	db := database.DB
-	
+
 	json := new(Key)
 	if err := c.BodyParser(json); err != nil {
 		return c.SendStatus(fiber.StatusBadRequest)
 	}
 
 	new := Key{
-		ID:       guuid.New(),
-		Expires:  SessionExpires(1),
+		ID:      guuid.New(),
+		Expires: SessionExpires(1),
 	}
 
 	db.Create(&new)
-	
+
 	c.Cookie(&fiber.Cookie{
 		Name:     "key",
 		Expires:  SessionExpires(1),
@@ -41,10 +41,9 @@ func GetKeys(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(Keys)
 }
 
-
 func GetKeyById(c *fiber.Ctx) error {
-	ip := c.IP() 
-	
+	ip := c.IP()
+
 	db := database.DB
 	json := new(Key)
 
@@ -88,5 +87,3 @@ func DeleteKey(c *fiber.Ctx) error {
 	db.Delete(&found)
 	return c.SendStatus(fiber.StatusOK)
 }
-
-

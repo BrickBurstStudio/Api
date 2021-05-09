@@ -1,7 +1,6 @@
 package router
 
 import (
-
 	"github.com/NikSchaefer/go-fiber/handlers"
 	"github.com/NikSchaefer/go-fiber/middleware"
 	"github.com/gofiber/fiber/v2"
@@ -11,9 +10,9 @@ import (
 
 func Initalize(router *fiber.App) {
 
-    // router.Use("/assets", filesystem.New(filesystem.Config{
-    //     Root: pkger.Dir("/assets"),
-    // }))
+	// router.Use("/assets", filesystem.New(filesystem.Config{
+	//     Root: pkger.Dir("/assets"),
+	// }))
 
 	router.Use(middleware.Security)
 
@@ -39,8 +38,8 @@ func Initalize(router *fiber.App) {
 	products.Post("/", handlers.GetProductById)
 	products.Patch("/", handlers.UpdateProduct)
 
-	keys := router.Group("/keys")
-	keys.Put("/", middleware.KeyCheck, handlers.CreateKey)
+	keys := router.Group("/keys", middleware.KeyCheck)
+	keys.Put("/", handlers.CreateKey)
 	keys.Post("/all", handlers.GetKeys)
 	keys.Delete("/", handlers.DeleteKey)
 	keys.Post("/", handlers.GetKeyById)
@@ -56,9 +55,7 @@ func Initalize(router *fiber.App) {
 	// files.Delete("/", handlers.DeleteFile)
 	// files.Patch("/", handlers.UpdateFile)
 
-
 	router.Use(func(c *fiber.Ctx) error {
 		return c.Status(404).SendString("404 Not Found")
 	})
-
 }
