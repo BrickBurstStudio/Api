@@ -1,6 +1,7 @@
 package handlers
 
 import (
+
 	"github.com/NikSchaefer/go-fiber/database"
 	"github.com/NikSchaefer/go-fiber/model"
 	"github.com/gofiber/fiber/v2"
@@ -12,13 +13,23 @@ type Key model.Key
 
 func CreateKey(c *fiber.Ctx) error {
 	db := database.DB
+	ip := c.IP()
 
 	json := new(Key)
 	if err := c.BodyParser(json); err != nil {
 		return c.SendStatus(fiber.StatusBadRequest)
 	}
 
+	found := Key{}
+	query := Key{IP:ip}
+	err := db.First(&found, &query).Error
+
+	if err != gorm.ErrRecordNotFound {
+		return c.Status(fiber.StatusBadRequest).SendString("A key with that ip address has already been created")
+	}
+	
 	new := Key{
+		IP:ip,
 		ID:      guuid.New(),
 		Expires: SessionExpires(1),
 	}
