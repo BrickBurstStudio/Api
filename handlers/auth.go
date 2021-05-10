@@ -75,7 +75,10 @@ func Logout(c *fiber.Ctx) error {
 	db := database.DB
 	json := new(Session)
 	if err := c.BodyParser(json); err != nil {
-		return c.SendStatus(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"code": 400,
+			"message": "Bad request",
+		})
 	}
 	session := Session{}
 	query := Session{SessionID: json.SessionID}
@@ -96,7 +99,10 @@ func CreateUser(c *fiber.Ctx) error {
 	
 	json := new(User)
 	if err := c.BodyParser(json); err != nil {
-		return c.SendStatus(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"code": 400,
+			"message": "Bad request",
+		})
 	}
 	password := hashAndSalt([]byte(json.Password))
 
@@ -143,7 +149,10 @@ func DeleteUser(c *fiber.Ctx) error {
 	json := new(DeleteUserRequest)
 	user := c.Locals("user").(User)
 	if err := c.BodyParser(json); err != nil {
-		return c.SendStatus(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"code": 400,
+			"message": "Bad request",
+		})
 	}
 	if !comparePasswords(user.Password, []byte(json.password)) {
 		return c.Status(fiber.StatusUnauthorized).SendString("Invalid Password")
@@ -163,7 +172,10 @@ func ChangePassword(c *fiber.Ctx) error {
 	user := c.Locals("user").(User)
 	json := new(ChangePasswordRequest)
 	if err := c.BodyParser(json); err != nil {
-		return c.SendStatus(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"code": 400,
+			"message": "Bad request",
+		})
 	}
 	if !comparePasswords(user.Password, []byte(json.NewPassword)) {
 		return c.Status(fiber.StatusBadRequest).SendString("Invalid Password")
@@ -182,7 +194,10 @@ func ChangeDiscord(c *fiber.Ctx) error {
 	user := c.Locals("user").(User)
 	json := new(ChangeDiscordRequest)
 	if err := c.BodyParser(json); err != nil {
-		return c.SendStatus(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"code": 400,
+			"message": "Bad request",
+		})
 	}
 	user.Discord = json.NewDiscord
 	db.Save(&user)

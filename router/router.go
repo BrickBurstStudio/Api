@@ -41,7 +41,7 @@ func Initalize(router *fiber.App) {
 	// keys := router.Group("/keys", middleware.KeyCheck)
 	keys := router.Group("/keys")
 	keys.Put("/", handlers.CreateKey)
-	keys.Post("/all", handlers.GetKeys)
+	// keys.Post("/all", handlers.GetKeys)
 	keys.Delete("/", handlers.DeleteKey)
 	keys.Post("/", handlers.GetKeyById)
 	keys.Patch("/", handlers.UpdateKey)

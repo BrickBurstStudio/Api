@@ -46,12 +46,12 @@ func CreateKey(c *fiber.Ctx) error {
 	})
 }
 
-func GetKeys(c *fiber.Ctx) error {
-	db := database.DB
-	Keys := []Key{}
-	db.Model(&model.Key{}).Order("ID asc").Limit(100).Find(&Keys)
-	return c.Status(fiber.StatusOK).JSON(Keys)
-}
+// func GetKeys(c *fiber.Ctx) error {
+// 	db := database.DB
+// 	Keys := []Key{}
+// 	db.Model(&model.Key{}).Order("ID asc").Limit(100).Find(&Keys)
+// 	return c.Status(fiber.StatusOK).JSON(Keys)
+// }
 
 func GetKeyById(c *fiber.Ctx) error {
 	ip := c.IP()
@@ -68,8 +68,6 @@ func GetKeyById(c *fiber.Ctx) error {
 			"message": "Key not found",
 		})
 	}
-
-	db.Save(&found)
 
 	return c.JSON(fiber.Map{
 		"code":    200,
@@ -99,6 +97,7 @@ func DeleteKey(c *fiber.Ctx) error {
 		"message": "success",
 	})
 }
+
 func UpdateKey(c *fiber.Ctx) error {
 	json := new(Key)
 
@@ -123,7 +122,7 @@ func UpdateKey(c *fiber.Ctx) error {
 			"message": "Product Not Found",
 		})
 	}
-
+	json.IP = ip
 	if json.Check1 != false {
 		found.Check1 = json.Check1
 	} else if json.Check2 != false {
