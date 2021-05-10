@@ -15,8 +15,10 @@ import (
 func getenv(key, fallback string) string {
 	value := os.Getenv(key)
 	if len(value) == 0 {
+
 		return fallback
 	}
+
 	return value
 }
 
@@ -26,9 +28,17 @@ func main() {
 		ProxyHeader: "",
 	})
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "*", // comma format e.g.
+		AllowOrigins: "localhost, revivalexploit.com",
 		AllowHeaders: "Origin, Content-Type, Accept",
 	}))
+
+	app.Use(func(c *fiber.Ctx) error {
+		if c.BaseURL() == "revivalexploit.com" || c.BaseURL() == "localhost" {
+			return c.Next()
+		}
+		return c.Status(fiber.StatusBadRequest).SendString("Go fuck your self")
+	
+	})
 
 	database.ConnectDB()
 

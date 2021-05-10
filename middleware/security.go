@@ -10,7 +10,6 @@ func Security(c *fiber.Ctx) error {
 	c.Set("X-Frame-Options", "DENY")
 	c.Set("X-DNS-Prefetch-Control", "off")
 	c.Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS")
-	c.Set("Access-Control-Allow-Origin", "*")
 	c.Set("Content-Security-Policy", "default-src https:")
 	return c.Next()
 }
