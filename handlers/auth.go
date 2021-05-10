@@ -41,7 +41,10 @@ func Login(c *fiber.Ctx) error {
 	db := database.DB
 	json := new(LoginRequest)
 	if err := c.BodyParser(json); err != nil {
-		return c.SendStatus(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"code": 400,
+			"message": "Bad request",
+		})
 	}
 
 	found := User{}
