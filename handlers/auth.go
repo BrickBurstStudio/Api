@@ -45,23 +45,27 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	found := User{}
-	query := User{Username: json.Username}
+	query := User{Username: strings.ToLower(json.Username)}
 	err := db.First(&found, &query).Error
 	if err == gorm.ErrRecordNotFound {
-		return c.Status(fiber.StatusNotFound).SendString("User not Found")
+		return c.JSON(fiber.Map{
+			"code": 400,
+			"message": "Invalid Username",
+		})
 	}
 	if !comparePasswords(found.Password, []byte(json.Password)) {
-		return c.Status(fiber.StatusBadRequest).SendString("Incorrect Password")
+		return c.JSON(fiber.Map{
+			"code": 400,
+			"message": "Incorrect Password",
+		})
 	}
 	session := Session{UserRefer: found.ID, Expires: SessionExpires(7), SessionID: guuid.New()}
 	db.Create(&session)
-	c.Cookie(&fiber.Cookie{
-		Name:     "sessionID",
-		Expires:  SessionExpires(7),
-		Value:    session.SessionID.String(),
-		HTTPOnly: false,
+	return c.JSON(fiber.Map{
+		"code": 200,
+		"message": "success",
+		"data": session,
 	})
-	return c.Status(fiber.StatusOK).JSON(session)
 }
 
 func Logout(c *fiber.Ctx) error {
@@ -77,8 +81,11 @@ func Logout(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).SendString("Session Not Found")
 	}
 	db.Delete(&session)
-	c.ClearCookie("sessionID")
-	return c.SendStatus(fiber.StatusOK)
+	c.ClearCookie("sessionid")
+	return c.JSON(fiber.Map{
+		"code": 200,
+		"message": "success",
+	})
 }
 
 func CreateUser(c *fiber.Ctx) error {
@@ -109,18 +116,20 @@ func CreateUser(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString("Creation Error")
 	}
-	c.Cookie(&fiber.Cookie{
-		Name:     "sessionID",
-		Expires:  SessionExpires(7),
-		Value:    session.SessionID.String(),
-		HTTPOnly: false,
+	return c.JSON(fiber.Map{
+		"code": 200,
+		"message": "success",
+		"data": session,
 	})
-	return c.Status(fiber.StatusOK).JSON(session)
 }
 
 func GetUserInfo(c *fiber.Ctx) error {
 	user := c.Locals("user").(User)
-	return c.Status(200).JSON(user)
+	return c.JSON(fiber.Map{
+		"code": 200,
+		"message": "success",
+		"data": user,
+	})
 }
 
 func DeleteUser(c *fiber.Ctx) error {
@@ -139,7 +148,7 @@ func DeleteUser(c *fiber.Ctx) error {
 	db.Model(&user).Association("Sessions").Delete()
 	db.Model(&user).Association("Products").Delete()
 	db.Delete(&user)
-	c.ClearCookie("sessionID")
+	c.ClearCookie("sessionid")
 	return c.SendStatus(fiber.StatusOK)
 }
 

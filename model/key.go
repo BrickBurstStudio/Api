@@ -7,10 +7,11 @@ import (
 )
 
 type Key struct {
-	ID 	  	  	guuid.UUID 	`gorm:"primaryKey" json:"ID"`
+	ID 	  	  	guuid.UUID 	`gorm:"primaryKey" json:"id"`
 	Expires   	time.Time  	`json:"expires"`
 	IP			string		`json:"ip"`
 	CreatedAt 	int64      	`gorm:"autoCreateTime" json:"-" `
+	UpdatedAt 	int64      	`gorm:"autoUpdateTime" json:"updated"`
 	Check1 		bool		`json:"c1"`
 	Check2 		bool		`json:"c2"`
 	Check3 		bool		`json:"c3"`

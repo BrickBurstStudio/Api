@@ -28,17 +28,18 @@ func main() {
 		ProxyHeader: "",
 	})
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "localhost, revivalexploit.com",
+		// AllowOrigins: "*",
+		AllowOrigins: "http://localhost:3003, https://www.revivalexploit.com",
 		AllowHeaders: "Origin, Content-Type, Accept",
 	}))
 
-	app.Use(func(c *fiber.Ctx) error {
-		if c.BaseURL() == "revivalexploit.com" || c.BaseURL() == "localhost" {
-			return c.Next()
-		}
-		return c.Status(fiber.StatusBadRequest).SendString("Go fuck your self")
-	
-	})
+	// app.Use(func(c *fiber.Ctx) error {
+	// 	if c.BaseURL() == "revivalexploit.com" || c.BaseURL() == "localhost" {
+	// 		return c.Next()
+	// 	}
+	// 	return c.Status(fiber.StatusBadRequest).SendString("Go fuck your self")
+
+	// })
 
 	database.ConnectDB()
 

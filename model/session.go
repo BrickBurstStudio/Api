@@ -7,7 +7,7 @@ import (
 )
 
 type Session struct {
-	SessionID guuid.UUID `gorm:"primaryKey" json:"sessionID"`
+	SessionID guuid.UUID `gorm:"primaryKey" json:"sessionid"`
 	Expires   time.Time  `json:"-"`
 	UserRefer guuid.UUID `json:"-"`
 	CreatedAt int64      `gorm:"autoCreateTime" json:"-" `
