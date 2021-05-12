@@ -26,6 +26,7 @@ func CreateKey(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{
 			"code":    400,
 			"message": "A key with that ip address has already been created",
+			"debug": json,
 		})
 	}
 
