@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type File from model.File
+type File model.File
 
 func GetFile(c *fiber.Ctx) error {
 	json := new(File)
@@ -16,6 +16,8 @@ func GetFile(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{
 			"code":    400,
 			"message": "Bad request",
+			"debug": json,
+
 		})
 	}
 
@@ -25,10 +27,20 @@ func GetFile(c *fiber.Ctx) error {
 	query := File{Url: json.Url}
 	err := db.First(&found, &query).Error
 
+	if err == gorm.ErrRecordNotFound {
+		return c.JSON(fiber.Map{
+			"code":    400,
+			"message": "File not found",
+			"debug": json,
+		})
+	}
+
 	return c.JSON(fiber.Map{
 		"code":    200,
 		"message": "success",
 		"data":    found,
+		"debug": json,
+
 	})
 }
 
@@ -38,6 +50,8 @@ func UpdateFile(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{
 			"code":    400,
 			"message": "Bad request",
+			"debug": json,
+
 		})
 	}
 
@@ -56,6 +70,8 @@ func UpdateFile(c *fiber.Ctx) error {
 			"code":    200,
 			"message": "success",
 			"data":    new,
+			"debug": json,
+
 		})
 	}
 
@@ -66,5 +82,7 @@ func UpdateFile(c *fiber.Ctx) error {
 		"code":    200,
 		"message": "success",
 		"data":    found,
+		"debug": json,
+
 	})
 }
