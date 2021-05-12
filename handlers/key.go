@@ -47,6 +47,8 @@ func CreateKey(c *fiber.Ctx) error {
 		"code":    200,
 		"message": "success",
 		"data":    new,
+		"debug": json,
+
 	})
 }
 
@@ -89,6 +91,7 @@ func GetKeyById(c *fiber.Ctx) error {
 		"code":    200,
 		"message": "success",
 		"data":    found,
+		"debug": json,
 	})
 }
 
@@ -135,7 +138,7 @@ func UpdateKey(c *fiber.Ctx) error {
 	if err == gorm.ErrRecordNotFound {
 		return c.JSON(fiber.Map{
 			"code":    400,
-			"message": "Product Not Found",
+			"message": "Key Update Not Found",
 		})
 	}
 	if json.Check1 != false {
