@@ -11,9 +11,17 @@ import (
 type Key model.Key
 
 func CreateKey(c *fiber.Ctx) error {
-	db := database.DB
-	ip := c.IP()
+	json := new(Key)
 
+	if err := c.BodyParser(json); err != nil {
+		return c.JSON(fiber.Map{
+			"code":    400,
+			"message": "Bad request",
+		})
+	}
+
+	ip := json.IP
+	db := database.DB
 	found := Key{}
 	query := Key{IP: ip}
 	err := db.First(&found, &query).Error
@@ -53,8 +61,17 @@ func CreateKey(c *fiber.Ctx) error {
 // 	return c.Status(fiber.StatusOK).JSON(Keys)
 // }
 
+
 func GetKeyById(c *fiber.Ctx) error {
-	ip := c.IP()
+	json := new(Key)
+
+	if err := c.BodyParser(json); err != nil {
+		return c.JSON(fiber.Map{
+			"code":    400,
+			"message": "Bad request",
+		})
+	}
+	ip := json.IP
 
 	db := database.DB
 
@@ -108,7 +125,7 @@ func UpdateKey(c *fiber.Ctx) error {
 		})
 	}
 
-	ip := c.IP()
+	ip := json.IP
 	db := database.DB
 
 	found := Key{}
@@ -122,7 +139,6 @@ func UpdateKey(c *fiber.Ctx) error {
 			"message": "Product Not Found",
 		})
 	}
-	json.IP = ip
 	if json.Check1 != false {
 		found.Check1 = json.Check1
 	} else if json.Check2 != false {
