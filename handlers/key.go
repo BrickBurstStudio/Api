@@ -84,6 +84,8 @@ func GetKeyById(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{
 			"code":    400,
 			"message": "Key not found",
+			"debug": json,
+
 		})
 	}
 
