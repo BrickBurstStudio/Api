@@ -1,1 +1,0 @@
-web: .\go-fiber.exe

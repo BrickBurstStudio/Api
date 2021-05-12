@@ -64,7 +64,7 @@ Docker build base image in first stage for development
 docker build --target build -t base .
 **
 run dev container
-docker run -p 3000:3000 --mount type=bind,source="C:\Users\schaefer\go\src\fiber",target=/go/src/app --name fiber -td base
+docker run -p 6969:6969 --mount type=bind,source="C:\Users\schaefer\go\src\fiber",target=/go/src/app --name fiber -td base
 **
 rebuild and run package
 docker exec -it web go run main.go
