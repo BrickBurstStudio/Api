@@ -14,10 +14,19 @@ func CreateKey(c *fiber.Ctx) error {
 	type KeyRequest struct {
 		Ip      string `json:"ip"`
 	}
+
 	json := new(KeyRequest)
+	if err := c.BodyParser(json); err != nil {
+		return c.JSON(fiber.Map{
+			"code":    400,
+			"message": "Bad request",
+		})
+	}
 
 	ip := json.Ip
+
 	db := database.DB
+	
 	found := Key{}
 	query := Key{IP: ip}
 	err := db.First(&found, &query).Error
