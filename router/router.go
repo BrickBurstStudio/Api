@@ -43,7 +43,8 @@ func Initalize(router *fiber.App) {
 	hub.Delete("/", handlers.DeleteScript)
 
 	file := router.Group("/files")
-	file.Get("/",handlers.GetFile)
+	file.Get("/", handlers.GetFile)
+	file.Patch("/", handlers.UpdateFile)
 
 
 	router.Use(func(c *fiber.Ctx) error {

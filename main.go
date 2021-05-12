@@ -29,7 +29,7 @@ func main() {
 	})
 	app.Use(cors.New(cors.Config{
 		// AllowOrigins: "*",
-		AllowOrigins: "http://localhost:3003, https://revivalexploit.com",
+		AllowOrigins: "http://localhost:3003, https://revivalexploit.com, https://hazar-bot.herokuapp.com",
 		AllowHeaders: "Origin, Content-Type, Accept",
 	}))
 
