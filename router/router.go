@@ -4,16 +4,9 @@ import (
 	"github.com/NikSchaefer/go-fiber/handlers"
 	"github.com/NikSchaefer/go-fiber/middleware"
 	"github.com/gofiber/fiber/v2"
-	// "github.com/gofiber/fiber/v2/middleware/filesystem"
-	// "github.com/markbates/pkger"
 )
 
 func Initalize(router *fiber.App) {
-
-	// router.Use("/assets", filesystem.New(filesystem.Config{
-	//     Root: pkger.Dir("/assets"),
-	// }))
-
 	router.Use(middleware.Security)
 
 	router.Get("/", func(c *fiber.Ctx) error {
@@ -38,26 +31,20 @@ func Initalize(router *fiber.App) {
 	products.Post("/", handlers.GetProductById)
 	products.Patch("/", handlers.UpdateProduct)
 
-	// keys := router.Group("/keys", middleware.KeyCheck)
 	keys := router.Group("/keys")
 	keys.Put("/", handlers.CreateKey)
-	// keys.Post("/all", handlers.GetKeys)
 	keys.Delete("/", handlers.DeleteKey)
 	keys.Post("/", handlers.GetKeyById)
 	keys.Patch("/", handlers.UpdateKey)
 
 	hub := router.Group("/hub")
-	// hub.Put("/", middleware.KeyCheck, handlers.CreateScript)
 	hub.Put("/", handlers.CreateScript)
 	hub.Post("/", handlers.GetScripts)
-	// hub.Delete("/", middleware.KeyCheck, handlers.DeleteScript)
 	hub.Delete("/", handlers.DeleteScript)
 
-	// files := router.Group("/files")
-	// files.Put("/", handlers.CreateFile)
-	// files.Post("/", handlers.GetFile)
-	// files.Delete("/", handlers.DeleteFile)
-	// files.Patch("/", handlers.UpdateFile)
+	file := router.Group("/files")
+	file.Get("/",handlers.GetFile)
+
 
 	router.Use(func(c *fiber.Ctx) error {
 		return c.Status(404).SendString("404 Not Found")

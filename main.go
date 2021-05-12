@@ -33,6 +33,8 @@ func main() {
 		AllowHeaders: "Origin, Content-Type, Accept",
 	}))
 
+	
+
 	// app.Use(func(c *fiber.Ctx) error {
 	// 	if c.BaseURL() == "revivalexploit.com" || c.BaseURL() == "localhost" {
 	// 		return c.Next()
