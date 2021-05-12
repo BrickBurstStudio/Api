@@ -3,4 +3,4 @@ build:
     web: Dockerfile
 
 run:
-  web: ./revival
+  web: ./app
