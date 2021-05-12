@@ -11,16 +11,12 @@ import (
 type Key model.Key
 
 func CreateKey(c *fiber.Ctx) error {
-	json := new(Key)
-
-	if err := c.BodyParser(json); err != nil {
-		return c.JSON(fiber.Map{
-			"code":    400,
-			"message": "Bad request",
-		})
+	type KeyRequest struct {
+		Ip      string `json:"ip"`
 	}
+	json := new(KeyRequest)
 
-	ip := json.IP
+	ip := json.Ip
 	db := database.DB
 	found := Key{}
 	query := Key{IP: ip}
@@ -63,7 +59,10 @@ func CreateKey(c *fiber.Ctx) error {
 
 
 func GetKeyById(c *fiber.Ctx) error {
-	json := new(Key)
+	type KeyRequest struct {
+		Ip      string `json:"ip"`
+	}
+	json := new(KeyRequest)
 
 	if err := c.BodyParser(json); err != nil {
 		return c.JSON(fiber.Map{
@@ -71,7 +70,7 @@ func GetKeyById(c *fiber.Ctx) error {
 			"message": "Bad request",
 		})
 	}
-	ip := json.IP
+	ip := json.Ip
 
 	db := database.DB
 
