@@ -46,7 +46,7 @@ func UpdateFile(c *fiber.Ctx) error {
 	db := database.DB
 
 	found := File{}
-	query := File{Url: json.Url}
+	query := File{}
 	err := db.First(&found, &query).Error
 
 	if err == gorm.ErrRecordNotFound {
