@@ -44,13 +44,13 @@ func main() {
 	database.ConnectDB()
 
 	router.Initalize(app)
-	log.Fatal(app.Listen(":" + getenv("PORT", "3002")))
+	log.Fatal(app.Listen(":" + getenv("PORT", "3000")))
 }
 
 /*
 ENV Variables:
 will auto set to 3000 if not set
-PORT=3002
+PORT=3000
 this should be a connection string or url
 DATABASE_URL="host=localhost port=5432 user=postgres password= dbname= sslmode=disable"
 **
@@ -64,7 +64,7 @@ Docker build base image in first stage for development
 docker build --target build -t base .
 **
 run dev container
-docker run -p 6969:6969 --mount type=bind,source="C:\Users\schaefer\go\src\fiber",target=/go/src/app --name fiber -td base
+docker run -p 6969:6969 --mount type=bind,source="C:\Users\hazim\go\src\fiber",target=/go/src/app --name fiber -td base
 **
 rebuild and run package
 docker exec -it web go run main.go
