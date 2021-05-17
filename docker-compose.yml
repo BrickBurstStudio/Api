@@ -15,7 +15,7 @@ services:
     volumes:
       - .:/code
     ports:
-      - "3000:3000"
+      - "6969:6969"
     depends_on:
       - db
     environment: 
