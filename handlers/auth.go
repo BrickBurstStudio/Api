@@ -161,7 +161,10 @@ func DeleteUser(c *fiber.Ctx) error {
 	db.Model(&user).Association("Products").Delete()
 	db.Delete(&user)
 	c.ClearCookie("sessionid")
-	return c.SendStatus(fiber.StatusOK)
+	return c.JSON(fiber.Map{
+		"code": 200,
+		"message": "success",
+	})
 }
 
 func ChangePassword(c *fiber.Ctx) error {
@@ -182,7 +185,10 @@ func ChangePassword(c *fiber.Ctx) error {
 	}
 	user.Password = hashAndSalt([]byte(json.NewPassword))
 	db.Save(&user)
-	return c.SendStatus(fiber.StatusOK)
+	return c.JSON(fiber.Map{
+		"code": 200,
+		"message": "success",
+	})
 }
 
 func ChangeDiscord(c *fiber.Ctx) error {
@@ -201,7 +207,10 @@ func ChangeDiscord(c *fiber.Ctx) error {
 	}
 	user.Discord = json.NewDiscord
 	db.Save(&user)
-	return c.SendStatus(fiber.StatusOK)
+	return c.JSON(fiber.Map{
+		"code": 200,
+		"message": "success",
+	})
 }
 
 func hashAndSalt(pwd []byte) string {
