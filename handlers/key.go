@@ -47,12 +47,6 @@ func CreateKey(c *fiber.Ctx) error {
 
 	db.Create(&new)
 
-	c.Cookie(&fiber.Cookie{
-		Name:     "key",
-		Expires:  SessionExpires(1),
-		Value:    new.ID.String(),
-		HTTPOnly: false,
-	})
 	return c.JSON(fiber.Map{
 		"code":    200,
 		"message": "success",
