@@ -98,10 +98,12 @@ func CreateUser(c *fiber.Ctx) error {
 	db := database.DB
 	
 	json := new(User)
+	print(json)
 	if err := c.BodyParser(json); err != nil {
-		return c.JSON(fiber.Map{
-			"code": 400,
-			"message": "Bad request",
+		return c.JSON(fiber.Map{/*  */
+			"code": 400,/*  */
+			"message": "Bad /*  */request",
+			"debug":json,
 		})
 	}
 	password := hashAndSalt([]byte(json.Password))
