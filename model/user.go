@@ -9,7 +9,6 @@ type User struct {
 	Username  		string     	`json:"username"`
 	Discord   		int	 		`gorm:"default:0" json:"discord"`
 	Email     		string     	`json:"email"`
-	Blacklisted 	bool		`gorm:"default:false" json:"blacklisted"`
 	Password  		string     	`json:"-"`
 	Sessions  		[]Session 	`gorm:"foreignKey:UserRefer; constraint:OnUpdate:CASCADE, OnDelete:CASCADE;" json:"-"`
 	Products  		[]Product 	`gorm:"foreignKey:UserRefer; constraint:OnUpdate:CASCADE, OnDelete:CASCADE;" json:"-"`
