@@ -56,14 +56,6 @@ func CreateKey(c *fiber.Ctx) error {
 	})
 }
 
-// func GetKeys(c *fiber.Ctx) error {
-// 	db := database.DB
-// 	Keys := []Key{}
-// 	db.Model(&model.Key{}).Order("ID asc").Limit(100).Find(&Keys)
-// 	return c.Status(fiber.StatusOK).JSON(Keys)
-// }
-
-
 func GetKeyById(c *fiber.Ctx) error {
 	type KeyRequest struct {
 		Ip      string `json:"ip"`
